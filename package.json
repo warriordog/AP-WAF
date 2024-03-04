@@ -1,0 +1,14 @@
+{
+  "name": "ap-waf",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc -b tsconfig.json",
+    "bin": "tsc -b tsconfig.json && node dist/bin/index.js"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.21",
+    "typescript": "^5.3.3"
+  }
+}
