@@ -1,19 +1,18 @@
 {
   "verbose": true,
   "rules": {
-    "(internal)": {
-      "stripSignatures": "on",
+    "StripSignatures": "on",
 
-      "domainDenyList": ["on", {
-        "includeActivityTargets": true,
-        "domains": [
-          "poa.st.example.com",
-          "shitposter.club.example.com"
-        ]
-      }],
+    "DomainDenyList": ["on", {
+      "filterIncoming": true,
+      "filterOutgoing": true,
+      "domains": [
+        "poa.st.example.com",
+        "shitposter.club.example.com"
+      ]
+    }],
 
-      "domainAllowList": "off"
-    },
-    "reject-all": "off"
+    "DomainAllowList": "off",
+    "RejectAll": "off"
   }
 }

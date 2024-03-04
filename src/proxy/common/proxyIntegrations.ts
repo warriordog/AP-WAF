@@ -1,5 +1,8 @@
-import {RequestTransformer} from "../../domain/filter/transformer.js";
+import {Request} from "../../domain/filter/request.js";
+import {Action} from "../../domain/filter/action.js";
+import {RequestContext, RequestTransformer, ResponseTransformer} from "../../domain/filter/transformer.js";
 
 export interface ProxyIntegrations {
-    transformer?: RequestTransformer;
+    requestTransformer?: RequestTransformer;
+    responseTransformer?: ResponseTransformer;
 }

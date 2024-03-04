@@ -3,8 +3,9 @@ import {Engine} from "../engine/engine.js";
 import {ForwardProxy} from "../proxy/forward/forwardProxy.js";
 import {ReverseProxy} from "../proxy/reverse/reverseProxy.js";
 import {Logger} from "./logging/logger.js";
-import {Action} from "../domain/filter/action.js";
+import {Action, RequestAction, ResponseAction} from "../domain/filter/action.js";
 import {Request} from "../domain/filter/request.js";
+import {RequestContext, ResponseContext} from "../domain/filter/transformer.js";
 
 export class ApWaf {
     constructor(
@@ -20,12 +21,14 @@ export class ApWaf {
 
         this._logger.debug("Starting forward proxy");
         await this._forwardProxy.start({
-            transformer: this._transformOutgoing.bind(this)
+            requestTransformer: this._transformOutgoingRequest.bind(this),
+            responseTransformer: this._transformIncomingResponse.bind(this)
         });
 
         this._logger.debug("Starting reverse proxy");
         await this._reverseProxy.start({
-            transformer: this._transformIncoming.bind(this)
+            requestTransformer: this._transformIncomingRequest.bind(this),
+            responseTransformer: this._transformOutgoingResponse.bind(this)
         });
 
         this._logger.info("Started AP-WAF");
@@ -43,27 +46,45 @@ export class ApWaf {
         this._logger.info("Stopped AP-WAF");
     }
 
-    private async _transformIncoming(request: Request): Promise<Action> {
-        const action = await this._engine.transformIncoming(request);
+    private async _transformOutgoingRequest(context: RequestContext): Promise<RequestAction> {
+        const action = await this._engine.transformOutgoingRequest(context);
 
         if (this._config.logRequests)
-            this._logAction('Incoming', request, action);
+            this._logAction('Outgoing Request to', context.request, action);
 
         return action;
     }
 
-    private async _transformOutgoing(request: Request): Promise<Action> {
-        const action = await this._engine.transformOutgoing(request);
+    private async _transformIncomingResponse(context: ResponseContext): Promise<ResponseAction> {
+        const action = await this._engine.transformIncomingResponse(context);
 
         if (this._config.logRequests)
-            this._logAction('Outgoing', request, action);
+            this._logAction('Incoming Response from', context.request, action);
 
         return action;
     }
 
-    private _logAction(direction: string, request: Request, action: Action): void {
-        const description = action.type.description;
-        const uri = request.url;
-        this._logger.info('%s %s to %s', description, direction, uri);
+
+    private async _transformIncomingRequest(context: RequestContext): Promise<RequestAction> {
+        const action = await this._engine.transformIncomingRequest(context);
+
+        if (this._config.logRequests)
+            this._logAction('Incoming Request from', context.request, action);
+
+        return action;
+    }
+
+    private async _transformOutgoingResponse(context: ResponseContext): Promise<ResponseAction> {
+        const action = await this._engine.transformOutgoingResponse(context);
+
+        if (this._config.logRequests)
+            this._logAction('Outgoing Response to', context.request, action);
+
+        return action;
+    }
+
+    private _logAction(operation: string, request: Request, { description: action }: Action): void {
+        const target = request.url;
+        this._logger.info('%s %s %s', action, operation, target);
     }
 }

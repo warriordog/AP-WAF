@@ -1,17 +1,18 @@
-import { reject } from '../dist/domain/filter/action.js';
+import { drop } from '../dist/domain/filter/action.js';
+import {Rule} from "../src/domain/rules/rule.js";
 
-/** @type {Rule} **/
-export const rejectAll = {
-    id: 'reject-all',
+export class RejectAll extends Rule {
+    id = 'RejectAll';
+    name = 'Reject All';
+    description = 'Rejects all traffic';
 
-    name: 'Reject All',
-    description: 'Rejects all traffic',
-
-    async transformIncoming() {
-        return { type: reject };
-    },
-
-    async transformOutgoing() {
-        return { type: reject };
+    transformIncomingRequest(context) {
+        return drop;
     }
-};
+
+    transformOutgoingRequest(context) {
+        return drop;
+    }
+}
+
+export default { RejectAll };

@@ -1,6 +1,6 @@
-import {Action, forward} from "../domain/filter/action.js";
-import {Request} from "../domain/filter/request.js";
+import {forward, RequestAction, ResponseAction} from "../domain/filter/action.js";
 import {EngineConfig} from "./engineConfig.js";
+import {RequestContext, ResponseContext} from "../domain/filter/transformer.js";
 
 export class Engine {
     constructor(
@@ -10,16 +10,34 @@ export class Engine {
     /**
      * Filters an outgoing (from local to internet) request.
      */
-    async transformOutgoing(request: Request): Promise<Action> {
+    async transformOutgoingRequest(context: RequestContext): Promise<RequestAction> {
         // TODO implement the actual pipeline
-        return { type: forward };
+        return forward;
+    }
+
+    /**
+     * Filters an incoming (from internet to local) response.
+     * These responses are guaranteed to originate from outgoing responses.
+     */
+    async transformIncomingResponse(context: ResponseContext): Promise<ResponseAction> {
+        // TODO implement the actual pipeline
+        return forward;
     }
 
     /**
      * Filters an incoming (from internet to local) request.
      */
-    async transformIncoming(request: Request): Promise<Action> {
+    async transformIncomingRequest(context: RequestContext): Promise<RequestAction> {
         // TODO implement the actual pipeline
-        return { type: forward };
+        return forward;
+    }
+
+    /**
+     * Filters an outgoing (from local to internet) response.
+     * These responses are guaranteed to originate from incoming responses.
+     */
+    async transformOutgoingResponse(context: ResponseContext): Promise<ResponseAction> {
+        // TODO implement the actual pipeline
+        return forward;
     }
 }
