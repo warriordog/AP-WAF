@@ -24,4 +24,5 @@ export interface ResponseContext {
     response: Response;
 }
 
+// TODO move this somewhere else
 export type Awaitable<T> = Promise<T> | T;

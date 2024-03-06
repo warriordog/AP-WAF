@@ -6,6 +6,8 @@ import {Logger} from "./logging/logger.js";
 import {Action, RequestAction, ResponseAction} from "../domain/filter/action.js";
 import {Request} from "../domain/filter/request.js";
 import {RequestContext, ResponseContext} from "../domain/filter/transformer.js";
+import {RuleRegistry} from "../rules/registry/ruleRegistry.js";
+import {RuleLoader} from "../rules/loader/ruleLoader.js";
 
 export class ApWaf {
     constructor(
@@ -13,8 +15,26 @@ export class ApWaf {
         private readonly _logger: Logger,
         private readonly _engine: Engine,
         private readonly _forwardProxy: ForwardProxy,
-        private readonly _reverseProxy: ReverseProxy
+        private readonly _reverseProxy: ReverseProxy,
+        private readonly _ruleRegistry: RuleRegistry,
+        private readonly _ruleLoader: RuleLoader
     ) {}
+
+    async init(): Promise<void> {
+        this._logger.debug("Initializing AP-WAF...");
+
+        this._logger.debug("Loading external rules");
+        const ruleSets = await this._ruleLoader.loadAllRuleSets(error =>
+            this._logger.error(error)
+        );
+
+        this._logger.debug("Constructing rule classes");
+        this._ruleRegistry.addRuleSets(ruleSets, error =>
+            this._logger.error(error)
+        );
+
+        this._logger.info("Initialized AP-WAF.");
+    }
 
     async start(): Promise<void> {
         this._logger.debug("Starting AP-WAF...");

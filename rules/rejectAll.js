@@ -53,7 +53,7 @@ export class RejectAll extends Rule {
 
     /*
      * If your rule needs special configuration settings, you may load them by defining a constructor that accepts one argument of type "Json".
-     * This will contain the *raw* configuration entry, or null if none was provided.
+     * This will contain the provided configuration value, or null if none was provided.
      * Rules may throw an Error if the configuration is invalid, or they may implement flexible fail-safe parsing. Either is acceptable.
      */
 }

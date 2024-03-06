@@ -1,11 +1,11 @@
 import {
     Awaitable,
     RequestContext,
-    RequestTransformer,
-    ResponseContext,
-    ResponseTransformer
+    ResponseContext
 } from "../filter/transformer.js";
 import {RequestAction, ResponseAction} from "../filter/action.js";
+
+// TODO - consider making these static so that we don't have create an instance to get metadata.
 
 export abstract class Rule {
     readonly abstract id: string;
@@ -22,47 +22,3 @@ export interface Rule {
     transformOutgoingRequest?(context: RequestContext): Awaitable<RequestAction | void>;
     transformIncomingResponse?(context: ResponseContext): Awaitable<ResponseAction | void>;
 }
-
-// // export interface Rule {
-// //     id: string;
-// //
-// //     name?: string;
-// //     description?: string;
-// //
-// //     transformIncomingRequest?: RequestTransformer;
-// //     transformOutgoingResponse?: ResponseTransformer;
-// //
-// //     transformOutgoingRequest?: RequestTransformer;
-// //     transformIncomingResponse?: ResponseTransformer;
-// // }
-//
-// export function isRule(raw: unknown): raw is Rule {
-//     if (typeof(raw) !== 'object')
-//         return false;
-//
-//     if (raw == null)
-//         return false;
-//
-//     if (!('id' in raw) || typeof(raw.id) !== 'string')
-//         return false;
-//
-//     if ('name' in raw && typeof(raw.name) !== 'string')
-//         return false;
-//
-//     if ('description' in raw && typeof(raw.description) !== 'string')
-//         return false;
-//
-//     if ('transformIncomingRequest' in raw && typeof(raw.transformIncomingRequest) !== 'function')
-//         return false;
-//
-//     if ('transformOutgoingResponse' in raw && typeof(raw.transformOutgoingResponse) !== 'function')
-//         return false;
-//
-//     if ('transformOutgoingRequest' in raw && typeof(raw.transformOutgoingRequest) !== 'function')
-//         return false;
-//
-//     if ('transformIncomingResponse' in raw && typeof(raw.transformIncomingResponse) !== 'function')
-//         return false;
-//
-//     return true;
-// }

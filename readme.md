@@ -11,9 +11,10 @@ Key features include configurable rules, low-level protocol access, and the abil
 
 ## Project Status
 
-* [ ] Rules
+* [x] Rules
   * [x] Rules API
-  * [ ] Rule loader
+  * [x] Rule loader
+  * [x] Rules registry
 * [ ] Domain model
   * [x] Basic proxy API
   * [x] Content-agnostic payload wrapper
@@ -23,7 +24,7 @@ Key features include configurable rules, low-level protocol access, and the abil
   * [x] Router
   * [ ] Request / response normalization
   * [ ] Payload conversion
-  * [ ] Rules engine
+  * [x] Rules engine
 * [ ] Proxy support
   * [ ] Forward proxy
   * [ ] Reverse proxy
@@ -33,7 +34,9 @@ Key features include configurable rules, low-level protocol access, and the abil
 * [ ] Compatibility
   * [x] Strip LD-signatures
   * [ ] JSON-LD emulation
+  * [ ] ActivityPub parser
 * [ ] Configuration
   * [x] Rules configuration
   * [ ] Proxy config
 * [ ] Admin UI
+* [ ] Tests

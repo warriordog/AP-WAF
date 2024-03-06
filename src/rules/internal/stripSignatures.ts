@@ -5,32 +5,31 @@ import {RequestContext, ResponseContext} from "../../domain/filter/transformer.j
 import {isJsonLdType} from "../../domain/filter/contentTypes.js";
 import {Payload} from "../../domain/filter/payload.js";
 
-export const stripSignatures: Rule = {
-    id: 'stripSignatures',
-    name: 'Strip Signatures',
-    description: 'Removes Linked Data signatures from messages, to ensure that transformed messages are accepted. It is *highly* recommended to keep this enabled!',
+export class StripSignatures extends Rule {
+    readonly id = 'stripSignatures';
+    readonly name = 'Strip Signatures';
+    readonly description = 'Removes Linked Data signatures from messages, to ensure that transformed messages are accepted. It is *highly* recommended to keep this enabled!';
 
-    transformIncomingRequest: stripSignaturesFromRequest,
-    transformOutgoingResponse: stripSignaturesFromResponse,
+    transformIncomingRequest(context: RequestContext) {
+        return this._stripSignaturesFromPayload(context.request.payload);
+    }
+    transformOutgoingResponse(context: ResponseContext) {
+        return this._stripSignaturesFromPayload(context.response.payload);
+    }
 
-    transformOutgoingRequest: stripSignaturesFromRequest,
-    transformIncomingResponse: stripSignaturesFromResponse
-}
+    transformOutgoingRequest(context: RequestContext) {
+        return this._stripSignaturesFromPayload(context.request.payload);
+    }
+    transformIncomingResponse(context: ResponseContext) {
+        return this._stripSignaturesFromPayload(context.response.payload);
+    }
 
-export default { stripSignatures };
-
-export function stripSignaturesFromRequest(context: RequestContext) {
-    stripSignaturesFromPayload(context.request.payload);
-}
-export function stripSignaturesFromResponse(context: ResponseContext) {
-    stripSignaturesFromPayload(context.response.payload);
-}
-
-function stripSignaturesFromPayload(payload: Payload | undefined) {
-    if (payload && isJsonLdType(payload) && payload?.json) {
-        // TODO check for context
-        stripJson(payload.json);
-        return transform;
+    private _stripSignaturesFromPayload(payload: Payload | undefined) {
+        if (payload && isJsonLdType(payload) && payload?.json) {
+            // TODO check for context
+            stripJson(payload.json);
+            return transform;
+        }
     }
 }
 

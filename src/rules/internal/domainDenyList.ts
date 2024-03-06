@@ -130,5 +130,3 @@ export class DomainDenyList extends Rule {
         return this.domains.some(blocked => domainMatches(domain, blocked));
     }
 }
-
-export default { DomainDenyList };

@@ -1,18 +1,31 @@
 {
   "verbose": true,
   "rules": {
-    "StripSignatures": "on",
-
-    "DomainDenyList": ["on", {
-      "filterIncoming": true,
-      "filterOutgoing": true,
-      "domains": [
-        "poa.st.example.com",
-        "shitposter.club.example.com"
+    "loader": {
+      "modulePrefix": "./rules/",
+      "moduleExtensions": [
+        ".js",
+        ".mjs",
+        ".cjs"
       ]
-    }],
-
-    "DomainAllowList": "off",
-    "RejectAll": "off"
+    },
+    "registry": {
+      "settings": {
+        "StripSignatures": "on",
+        "DomainDenyList": [
+          "on",
+          {
+            "filterIncoming": true,
+            "filterOutgoing": true,
+            "domains": [
+              "poa.st.example.com",
+              "shitposter.club.example.com"
+            ]
+          }
+        ],
+        "DomainAllowList": "off",
+        "RejectAll": "off"
+      }
+    }
   }
 }
